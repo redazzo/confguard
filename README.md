@@ -58,19 +58,40 @@ database:
 confguard encrypt config.yaml.clr
 ```
 This creates `config.yaml.enc` with encrypted secret values.
-
+```yaml
+# config.yaml.enc
+database:
+  host: localhost
+  username: dbuser
+  password.secret: /#JKJHSHNC<MJOIBFMNDBDFJHDJHBFJDHB
+  port: 5432
+```
 2. Decrypt an encrypted file:
 ```bash
 confguard decrypt config.yaml.enc
 ```
 This creates `config.yaml` with decrypted values and removed `.secret` suffixes.
-
+```yaml
+# config yaml
+database:
+host: localhost
+username: dbuser
+password: mysecretpassword
+port: 5432
+```
 3. Regenerate clear file from encrypted:
 ```bash
 confguard regen config.yaml.enc
 ```
 This creates `config.yaml.clr` with decrypted values but maintains `.secret` suffixes.
-
+```yaml
+# config.yaml.clr
+database:
+host: localhost
+username: dbuser
+password.secret: mysecretpassword
+port: 5432
+```
 # Team Workflow
 
 ### Important: Edit Only .clr Files
