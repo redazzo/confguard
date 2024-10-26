@@ -1,4 +1,4 @@
-module confguard
+module github.com/redazzo/confguard
 
 go 1.20
 
