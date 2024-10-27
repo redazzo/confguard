@@ -22,7 +22,7 @@ go install github.com/redazzo/confguard@latest
 
 ### Key File
 
-Before using ConfGuard, you need to create a key file named `config_secret` in your working directory. This file should contain exactly 32 bytes of random data. You can generate it using:
+Before using ConfGuard, you need to create a key file named `config_secret` in your working directory, or a parent directory along the path to the working directory. This file should contain exactly 32 bytes of random data. You can generate it using:
 
 ```bash
 openssl rand -out config_secret 32
@@ -30,6 +30,7 @@ openssl rand -out config_secret 32
 
 Keep this file secure and share it through secure channels with your team members.
 
+NOTE: Placement of the config_secret file should ideally be in the parent directory of your git repo.
 ### File Naming Convention
 
 ConfGuard uses specific file extensions to manage different versions of your configuration files:

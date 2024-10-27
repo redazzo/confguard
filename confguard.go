@@ -7,14 +7,13 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v3"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v3"
 )
 
 const (
@@ -55,7 +54,32 @@ type CryptoManager struct {
 
 // NewCryptoManager creates a new crypto manager with the provided key
 func NewCryptoManager(keyFile string) (*CryptoManager, error) {
-	key, err := ioutil.ReadFile(keyFile)
+	// Get the current working directory
+	startDir, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get current working directory: %w", err)
+	}
+
+	// Start searching from current directory upwards
+	currentDir := startDir
+	var configPath string
+	for {
+		configPath = filepath.Join(currentDir, keyFile)
+		if _, err := os.Stat(configPath); err == nil {
+			fmt.Printf("Using config_secret from: %s\n", configPath)
+			break
+		}
+
+		// Get parent directory
+		parentDir := filepath.Dir(currentDir)
+		// If we're at the root directory, stop searching
+		if parentDir == currentDir {
+			return nil, fmt.Errorf("could not find %s in any parent directory starting from %s", keyFile, startDir)
+		}
+		currentDir = parentDir
+	}
+
+	key, err := os.ReadFile(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read key file: %w", err)
 	}
@@ -122,7 +146,7 @@ func (cm *CryptoManager) Decrypt(ciphertext string) (string, error) {
 
 // LoadConfiguration loads a configuration file into memory
 func LoadConfiguration(filename string) (*Configuration, error) {
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read file %s: %w", filename, err)
 	}
