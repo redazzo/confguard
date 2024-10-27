@@ -187,8 +187,6 @@ This `.gitignore` configuration:
 | no extension | Ignored | Working configuration files used by your application | NO |
 | config_secret | Ignored | Encryption key | NO |
 
-[Rest of the previous documentation remains the same until Security Notes]
-
 ## Security Notes
 
 - Never commit the `config_secret` file to version control
