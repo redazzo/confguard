@@ -375,8 +375,6 @@ func (c *Configuration) writeEnvNode(output *strings.Builder, node *ConfigNode) 
 	return nil
 }
 
-// ... [main() and handler functions remain unchanged] ...
-
 func handleEncrypt(filename string) error {
 	cm, err := NewCryptoManager("config_secret")
 	if err != nil {
